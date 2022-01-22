@@ -1,4 +1,3 @@
-import axios from "axios";
 import express, { NextFunction, response } from "express";
 
 import bookController from "../controllers/book.controller";
