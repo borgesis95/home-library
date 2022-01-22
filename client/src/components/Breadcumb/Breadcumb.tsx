@@ -31,7 +31,7 @@ const Breadcumb = ({ libraryName = '' }: BreadcumbProps) => {
             Libraries
           </Link>
         )}
-        {detailsMatches && <Link fontSize={15}>{libraryName} dgdg</Link>}
+        {detailsMatches && <Link fontSize={15}>{libraryName}</Link>}
       </Breadcrumbs>
     </>
   );
