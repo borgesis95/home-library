@@ -1,4 +1,4 @@
-import express, { NextFunction, response } from "express";
+import express from "express";
 
 import bookController from "../controllers/book.controller";
 
