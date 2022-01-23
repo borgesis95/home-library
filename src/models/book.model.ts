@@ -52,7 +52,7 @@ export const bookSchema = new mongoose.Schema<IBook>({
   },
   isRead: {
     type: Boolean,
-    required: true,
+    required: false,
   },
   startedRead: {
     type: String,

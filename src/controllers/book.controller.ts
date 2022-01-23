@@ -75,6 +75,21 @@ const addBook = async (
   }
 };
 
+const addListOfBooks = async (
+  req: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const { user } = req.locals;
+    const booksList = req.body;
+    const books = await bookService.addListOfBooks(user, booksList);
+    response.send(books);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const updateBook = async (
   req: express.Request,
   response: express.Response,
@@ -139,6 +154,7 @@ export default {
   getBooksWithoutShelf,
   associateBookToShelf,
   addBook,
+  addListOfBooks,
   updateBook,
   getAllBook,
   deleteBook,

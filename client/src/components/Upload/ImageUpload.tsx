@@ -1,17 +1,11 @@
 import { Button, CardMedia } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
-import api from 'src/services/axiosConfig';
-import { getImageAPI } from 'src/services/api';
 
-const Input = styled('input')({
-  display: 'none'
-});
+import { getImageAPI } from 'src/services/api';
+import { Input } from '../Input/Input';
 
 interface ImageUploadProps {
   imageUrl: string;

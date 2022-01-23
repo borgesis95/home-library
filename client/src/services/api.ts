@@ -52,6 +52,9 @@ export const getBookInfoByIsbnAPI = (isbn: string) => {
 export const addBookOnLibraryAPI = (body: FormData) => {
   return api.post(`book`, body);
 };
+export const addBooksListAPI = (body: Book[]) => {
+  return api.post(`book/list`, body);
+};
 
 export const updateBookOnLibraryAPI = (body: Book) => {
   return api.put(`book/`, body);

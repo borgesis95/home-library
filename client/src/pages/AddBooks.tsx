@@ -14,7 +14,7 @@ import { LoadingButton } from '@mui/lab';
 import CustomTabs from 'src/components/Tabs/CustomTabs';
 import { Helmet } from 'react-helmet-async';
 import FormBook from '../components/Form/Book.form';
-
+import AddBookExcel from './AddBooksFromExcel';
 const AddBooks = () => {
   const [isSearchLoading, setIsSearchLoading] = useState<boolean>(false);
 
@@ -121,6 +121,10 @@ const AddBooks = () => {
     return <FormBook title="Add new Book" />;
   };
 
+  const renderAddFromExcel = () => {
+    return <AddBookExcel />;
+  };
+
   return (
     <>
       <Helmet>
@@ -146,6 +150,10 @@ const AddBooks = () => {
             {
               label: 'Add manually',
               component: renderManually()
+            },
+            {
+              label: 'Import excel',
+              component: renderAddFromExcel()
             }
           ]}
         ></CustomTabs>

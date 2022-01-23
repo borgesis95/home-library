@@ -30,6 +30,7 @@ app.use("/library", libraryRoutes);
 app.use("/upload", authenticationMiddleware, uploadRoutes);
 app.use("/book", authenticationMiddleware, bookRoutes);
 app.use("/images", express.static("images"));
+app.use("/templates", express.static("templates"));
 
 app.use(errorHandler);
 

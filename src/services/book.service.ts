@@ -35,6 +35,29 @@ const addBookOnLibrary = async (user: IUser, book: IBook) => {
   return await Book.create(newBook);
 };
 
+/**
+ * Alllow to insert more books togheter
+ * @param user
+ * @param books
+ * @returns
+ */
+const addListOfBooks = async (user: IUser, books: IBook[]) => {
+  const mappingBooks = books.map((book: IBook) => {
+    return {
+      //@ts-ignore
+      isbn: book.ISBN,
+      //@ts-ignore
+      authors: book.Authors,
+      //@ts-ignore
+      title: book.Title,
+      userId: user._id,
+      shelfId: null,
+    };
+  });
+
+  return await Book.insertMany(mappingBooks);
+};
+
 const deleteBook = async (user: IUser, bookId: number | string) => {
   const book = await Book.findOne({ _id: bookId });
 
@@ -218,6 +241,7 @@ export default {
   getBooksFromShelfId,
   getBooksWithoutShelfAssociated,
   addBookOnLibrary,
+  addListOfBooks,
   updateBook,
   associateBooksToShelf,
   getAllBooks,
