@@ -4,9 +4,9 @@ export const mapBooksInformation = (book: any) => {
   return {
     thumbnail: book.imageLinks.smallThumbnail,
     title: book.title,
-    authors: book.authors.join(','),
-    categories: book.categories.join(','),
-    publishedDate: book.publishedDate
+    authors: book.authors && book.authors.join(','),
+    categories: book.categories ? book.categories.join(',') : '',
+    publishedDate: book.publishedDate ? book.publishedDate : ''
   };
 };
 

@@ -67,17 +67,7 @@ const ShelvesGrid = ({
               {shelf.name}
             </Typography>
           </TableCell>
-          <TableCell>
-            <Typography
-              variant="body1"
-              fontWeight="bold"
-              color="text.primary"
-              gutterBottom
-              noWrap
-            >
-              {shelf.booksNumber}
-            </Typography>
-          </TableCell>
+
           <TableCell align="right">
             <Tooltip title="Update Shelf" arrow>
               <IconButton
@@ -137,7 +127,6 @@ const ShelvesGrid = ({
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
-                <TableCell>N° Books</TableCell>
                 <TableCell align="right">Actions</TableCell>
               </TableRow>
             </TableHead>

@@ -5,7 +5,6 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const user_id = req.locals.user._id;
     const dir = `${process.env.IMAGES_PATH}${user_id}`;
-    console.log("dir", dir);
     const exists = fs.existsSync(dir);
     if (!exists) {
       fs.mkdirSync(dir, { recursive: true });

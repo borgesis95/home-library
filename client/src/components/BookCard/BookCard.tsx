@@ -52,7 +52,6 @@ const BookCard = ({
   };
   return (
     <CardActionArea>
-      {console.log('detail', detail.thumbnail)}
       <Card sx={{ display: 'flex' }} onClick={handleCardClick}>
         <CardMedia
           component="img"

@@ -23,19 +23,19 @@ app.use(cors());
 app.use(express.json());
 
 passport.use(strategy); // Define strategy
-app.use("/library", libraryRoutes);
 
 app.use(userRoutes);
+
+app.use("/library", libraryRoutes);
 app.use("/upload", authenticationMiddleware, uploadRoutes);
 app.use("/book", authenticationMiddleware, bookRoutes);
+app.use("/images", express.static("images"));
 
 app.use(errorHandler);
 
-app.use("/images", express.static("images"));
-
-app.use(express.static("public/build"));
+app.use(express.static("client/build"));
 app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "public", "build", "index.html"));
+  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
 });
 
 // If database does not exist, mongoose will create new one

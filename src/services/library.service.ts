@@ -212,6 +212,8 @@ const deleteShelf = async (user: IUser, libraryId: string, shelfId: string) => {
 const sharedBooksList = async (libraryId: number | string) => {
   const library = await Library.findOne({ _id: libraryId });
 
+  library;
+
   if (library && library.shareable) {
     const filters: any = [
       {
@@ -237,11 +239,7 @@ const sharedBooksList = async (libraryId: number | string) => {
       {
         $match: {
           $expr: {
-            $or: [
-              {
-                $eq: ["$shelfId", "$info.shelves._id"],
-              },
-            ],
+            $eq: ["$shelfId", "$info.shelves._id"],
           },
         },
       },
@@ -259,6 +257,11 @@ const sharedBooksList = async (libraryId: number | string) => {
           libraryId: "$info._id",
           shareable: "$info.shareable",
           shelf: "$info.shelves.name",
+        },
+      },
+      {
+        $match: {
+          libraryId: library._id,
         },
       },
       {

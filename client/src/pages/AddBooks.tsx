@@ -37,7 +37,8 @@ const AddBooks = () => {
         setBookInfo(mapBooksInformation(response.data[0].volumeInfo));
       })
       .catch((error) => {
-        notify.showNotification('Something went wrong', 'error');
+        const errMessage = error?.response?.data?.message;
+        notify.showNotification(errMessage, 'error');
         console.error(error);
       })
       .finally(() => {

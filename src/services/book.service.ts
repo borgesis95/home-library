@@ -4,8 +4,8 @@ import Book, { IBook } from "../models/book.model";
 import { Types } from "mongoose";
 import { existsSync } from "fs";
 import { thumbnailBooksMapping } from "../utils/utils";
-import { join } from "path";
 import { unlinkSync } from "fs";
+import CustomError from "../utils/CustomError.util";
 
 const PORT = process.env.PORT;
 const HOST = process.env.HOST || "localhost";
@@ -19,6 +19,10 @@ const imagePath = `http://${HOST}:${PORT}/`;
 const getBookInfo = async (isbn: number | string) => {
   const url = `${process.env.GOOGLE_BOOK_ENDPOINT}${isbn} ` || "";
   const bookInfo = await axios.get(url);
+
+  if (!bookInfo.data.items) {
+    throw new CustomError("Book has not found", 500);
+  }
   return bookInfo.data.items;
 };
 
@@ -34,7 +38,6 @@ const addBookOnLibrary = async (user: IUser, book: IBook) => {
 const deleteBook = async (user: IUser, bookId: number | string) => {
   const book = await Book.findOne({ _id: bookId });
 
-  console.log("book", book);
   if (book?.thumbnail && existsSync(book.thumbnail)) {
     unlinkSync(book.thumbnail);
   }

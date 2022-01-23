@@ -73,7 +73,7 @@ const NewShelfDialog = ({
         <Button
           variant="contained"
           color="success"
-          disabled={shelfName.length <= 0}
+          disabled={shelfName && shelfName.length <= 0}
           onClick={handleSave}
         >
           Save

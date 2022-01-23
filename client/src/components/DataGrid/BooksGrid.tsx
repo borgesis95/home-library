@@ -46,7 +46,6 @@ const BooksGrid = ({
   };
 
   const handleUpdateDialog = () => {
-    console.log('handleUpdate');
     setIsUpdateBookOpen(!isUpdateBookOpen);
   };
   const isReadedCellRender = (params: GridRenderCellParams<any, any, any>) => {
@@ -140,16 +139,18 @@ const BooksGrid = ({
       <Divider />
       <CardContent>
         <div style={{ height: 600, width: '100%' }}>
-          <DataGrid
-            getRowId={(row) => row._id}
-            showCellRightBorder={false}
-            showColumnRightBorder={false}
-            rows={booksRows}
-            columns={columns}
-            components={{
-              Toolbar: GridToolbar
-            }}
-          />
+          {booksRows && (
+            <DataGrid
+              getRowId={(row) => row._id}
+              showCellRightBorder={false}
+              showColumnRightBorder={false}
+              rows={booksRows}
+              columns={columns}
+              components={{
+                Toolbar: GridToolbar
+              }}
+            />
+          )}
         </div>
       </CardContent>
       <DeleteConfirmationDialog
@@ -159,7 +160,6 @@ const BooksGrid = ({
         title="Do you want to delete this book?"
         description={`This action will be delete "${rowSelected?.title}"  this book from your collection`}
       />
-      {console.log('isUpdate', isUpdateBookOpen)}
       <BookDialog
         title="Update Book"
         isDialogOpen={isUpdateBookOpen}
