@@ -5,6 +5,7 @@ import {
   addShelfAPI,
   associateBooksToShelf,
   deleteBookAPI,
+  deleteBookShelfAssociationAPI,
   deleteShelfAPI,
   getBooksFromShelfIdAPI,
   getLibraryFromIdAPI,
@@ -29,6 +30,7 @@ const Shelves = () => {
     useState<boolean>(false);
   const [shelfSelected, setShelfSelected] = useState<Shelf>();
   const [books, setBooks] = useState<Book>();
+  const [booksIdsSelected, setBooksIdsSelected] = useState<string[]>();
 
   const [isNewShelfDialogOpen, setShelfDialogOpen] = useState<boolean>(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -147,6 +149,20 @@ const Shelves = () => {
       });
   };
 
+  const onDeleteAssociationClick = () => {
+    deleteBookShelfAssociationAPI(booksIdsSelected)
+      .then((response) => {
+        notify.showNotification(
+          'books has been removed from this shelf',
+          'success'
+        );
+        fetchBooksFromShelfId();
+      })
+      .catch((error) => {
+        notify.showNotification(error, 'error');
+      });
+  };
+
   const onDeleteBook = (bookId: number) => {
     deleteBookAPI(bookId)
       .then(() => {
@@ -160,6 +176,10 @@ const Shelves = () => {
 
   const onUpdateBook = () => {
     fetchBooksFromShelfId();
+  };
+
+  const onBooksIdsSelected = (ids: string[]) => {
+    setBooksIdsSelected(ids);
   };
 
   const onOpenFromDialog = (operationType: OperationEnum) => {
@@ -223,15 +243,21 @@ const Shelves = () => {
               {shelfSelected && (
                 <>
                   <AssociateBooks
+                    isDeleteButtonDisabled={
+                      booksIdsSelected && booksIdsSelected.length <= 0
+                    }
+                    onDeleteAssociationClick={onDeleteAssociationClick}
                     onSave={associateBooks}
                     shelfSelected={shelfSelected}
                   />
                   <Grid item xs={12}>
                     <BooksGrid
+                      checkboxSelection={true}
                       booksRows={books}
                       onDeleteBookAction={onDeleteBook}
                       title={`Books List`}
                       onUpdateBookAction={onUpdateBook}
+                      onCheckboxSelected={onBooksIdsSelected}
                     />
                   </Grid>
                 </>

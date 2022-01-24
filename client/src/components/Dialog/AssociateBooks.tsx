@@ -12,10 +12,12 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { getBooksWithoutShelfAPI } from 'src/services/api';
 import { Book } from 'src/interface/Book';
 import { Shelf } from 'src/interface/shelves';
-
+import DeleteIcon from '@mui/icons-material/Delete';
 interface AssociateBooksProps {
   onSave: (booksIds: string[]) => void;
   shelfSelected: Shelf;
+  onDeleteAssociationClick: () => void;
+  isDeleteButtonDisabled: boolean;
 }
 
 const columns: GridColDef[] = [
@@ -24,7 +26,12 @@ const columns: GridColDef[] = [
   { field: 'authors', headerName: 'Authors', width: 250 }
 ];
 
-const AssociateBooks = ({ onSave, shelfSelected }: AssociateBooksProps) => {
+const AssociateBooks = ({
+  onSave,
+  shelfSelected,
+  onDeleteAssociationClick,
+  isDeleteButtonDisabled
+}: AssociateBooksProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [books, setBooks] = useState<Book[]>();
   const [booksSelected, setBooksSelected] = useState();
@@ -55,6 +62,37 @@ const AssociateBooks = ({ onSave, shelfSelected }: AssociateBooksProps) => {
 
   const onSelectionChange = (ids) => {
     setBooksSelected(ids);
+  };
+
+  const renderHederBooks = () => {
+    return (
+      <Box
+        sx={{
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'flex-end'
+        }}
+      >
+        <Button
+          sx={{ mt: { xs: 2, md: 0 }, mr: 1 }}
+          variant="contained"
+          color="error"
+          onClick={onDeleteAssociationClick}
+          disabled={isDeleteButtonDisabled}
+          startIcon={<DeleteIcon fontSize="small" />}
+        >
+          Remove Books from shelf
+        </Button>
+        <Button
+          sx={{ mt: { xs: 2, md: 0 } }}
+          variant="contained"
+          startIcon={<AddTwoToneIcon fontSize="small" />}
+          onClick={handleDialog}
+        >
+          Associate Books
+        </Button>
+      </Box>
+    );
   };
 
   const renderDialog = () => {
@@ -96,14 +134,7 @@ const AssociateBooks = ({ onSave, shelfSelected }: AssociateBooksProps) => {
         justifyContent: 'flex-end'
       }}
     >
-      <Button
-        sx={{ mt: { xs: 2, md: 0 } }}
-        variant="contained"
-        startIcon={<AddTwoToneIcon fontSize="small" />}
-        onClick={handleDialog}
-      >
-        Associate Books
-      </Button>
+      {renderHederBooks()}
       {isDialogOpen && renderDialog()}
     </Box>
   );

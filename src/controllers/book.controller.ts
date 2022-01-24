@@ -120,6 +120,21 @@ export const deleteBook = async (
   }
 };
 
+export const deleteShelfAssociation = async (
+  req: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const { user } = req.locals;
+    const booksIds = req.body;
+    await bookService.deleteShelfAssociation(user, booksIds);
+    response.send("Book association has been removed");
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const associateBookToShelf = async (
   req: express.Request,
   response: express.Response,
@@ -158,4 +173,5 @@ export default {
   updateBook,
   getAllBook,
   deleteBook,
+  deleteShelfAssociation,
 };

@@ -25,6 +25,9 @@ export interface BooksGridProps {
   otherColumns?: GridColDef[];
   onDeleteBookAction?: (bookId: number) => void;
   onUpdateBookAction?: () => void;
+  // Indicate elements can be selected
+  checkboxSelection?: boolean;
+  onCheckboxSelected?: (ids: string[]) => void;
 }
 
 const BooksGrid = ({
@@ -32,7 +35,9 @@ const BooksGrid = ({
   title,
   otherColumns = [],
   onDeleteBookAction,
-  onUpdateBookAction
+  onUpdateBookAction,
+  checkboxSelection = false,
+  onCheckboxSelected = null
 }: BooksGridProps) => {
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] =
     useState<boolean>(false);
@@ -146,9 +151,11 @@ const BooksGrid = ({
         <div style={{ height: 600, width: '100%' }}>
           {booksRows && (
             <DataGrid
+              checkboxSelection={checkboxSelection}
               getRowId={(row) => row._id}
               showCellRightBorder={false}
               showColumnRightBorder={false}
+              onSelectionModelChange={onCheckboxSelected}
               rows={booksRows}
               columns={columns}
               components={{

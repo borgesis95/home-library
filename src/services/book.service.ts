@@ -70,6 +70,15 @@ const deleteBook = async (user: IUser, bookId: number | string) => {
   return await Book.deleteOne({ _id: bookId });
 };
 
+const deleteShelfAssociation = async (user: IUser, bookIds: string[]) => {
+  const books = await Book.updateMany(
+    { _id: { $in: bookIds } },
+    { $set: { shelfId: null } },
+    { multi: true }
+  );
+  return books;
+};
+
 const updateBook = async (
   user: IUser,
   book: IBook & {
@@ -254,5 +263,6 @@ export default {
   associateBooksToShelf,
   getAllBooks,
   deleteBook,
+  deleteShelfAssociation,
   updateBookThumbnail,
 };

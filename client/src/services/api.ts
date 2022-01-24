@@ -75,6 +75,9 @@ export const getBooksWithoutShelfAPI = () => {
 export const deleteBookAPI = (bookId: number) => {
   return api.delete(`book/${bookId}`);
 };
+export const deleteBookShelfAssociationAPI = (booksIds: string[]) => {
+  return api.post(`book/delete/shelf`, booksIds);
+};
 
 export const getSharedBooksAPI = (libraryId) => {
   return api.get(`library/shared/${libraryId}`);

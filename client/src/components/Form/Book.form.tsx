@@ -31,7 +31,6 @@ import useForms from 'src/components/hooks/useForms';
 import { isLibraryPresent, isNotEmpty } from 'src/utils/validator';
 import { useNotification } from 'src/contexts/Notification';
 import { getShelvesFromLibrary } from 'src/utils/book';
-import { styled } from '@mui/material/styles';
 import ImageUpload from '../Upload/ImageUpload';
 
 const INITIAL_BOOK_ERROR = {

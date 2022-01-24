@@ -17,6 +17,7 @@ bookRoutes.post("/associate/:shelfId", bookController.associateBookToShelf);
 bookRoutes.get("/list/:shelfId", bookController.getBookFromShelfId);
 
 bookRoutes.delete("/:bookId", bookController.deleteBook);
+bookRoutes.post("/delete/shelf", bookController.deleteShelfAssociation);
 bookRoutes.get("/image/:url", bookController.getBookImage);
 
 export default bookRoutes;
