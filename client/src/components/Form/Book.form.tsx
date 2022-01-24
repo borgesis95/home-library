@@ -33,7 +33,6 @@ import { useNotification } from 'src/contexts/Notification';
 import { getShelvesFromLibrary } from 'src/utils/book';
 import { styled } from '@mui/material/styles';
 import ImageUpload from '../Upload/ImageUpload';
-import api from 'src/services/axiosConfig';
 
 const INITIAL_BOOK_ERROR = {
   isbn: {

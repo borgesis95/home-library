@@ -50,6 +50,8 @@ const addListOfBooks = async (user: IUser, books: IBook[]) => {
       authors: book.Authors,
       //@ts-ignore
       title: book.Title,
+      //@ts-ignore
+      description: book.Description,
       userId: user._id,
       shelfId: null,
     };
@@ -148,6 +150,9 @@ const getAllBooks = async (user: IUser) => {
         shelfId: 1,
         thumbnail: 1,
         description: 1,
+        isRead: 1,
+        isBorrow: 1,
+        borrowPerson: 1,
         library: "$info.name",
         libraryId: "$info._id",
         shelf: "$info.shelves.name",
@@ -212,6 +217,9 @@ const getBooksFromShelfId = async (shelfId: string) => {
         shelfId: 1,
         thumbnail: 1,
         description: 1,
+        isRead: 1,
+        isBorrow: 1,
+        borrowPerson: 1,
         libraryId: "$info._id",
         library: "$info.name",
         shelf: "$info.shelves.name",

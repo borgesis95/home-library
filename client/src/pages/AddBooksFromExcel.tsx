@@ -36,7 +36,7 @@ const AddBookExcel = () => {
   };
 
   const columns: GridColDef[] = [
-    { field: 'Isbn', headerName: 'ISBN', width: 180 },
+    { field: 'ISBN', headerName: 'ISBN', width: 180 },
     { field: 'Title', headerName: 'Title', width: 250 },
     { field: 'Authors', headerName: 'Authors', width: 300 },
     {
@@ -62,12 +62,16 @@ const AddBookExcel = () => {
   };
 
   const onUploadExcelFile = (event: Event) => {
+    event.preventDefault();
     const target = event.target as HTMLInputElement;
     const file: File = (target.files as FileList)[0];
 
+    console.log('file', file);
     if (file) {
       const reader = new FileReader();
       reader.readAsArrayBuffer(file);
+
+      console.log('ddd');
 
       // A handler for the FileReader.load_event event.
       //  This event is triggered each time the reading operation is successfully completed.
@@ -77,6 +81,7 @@ const AddBookExcel = () => {
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
         const jsonBooks = utils.sheet_to_json(worksheet);
+        console.log('jsonBokks', jsonBooks);
         setBooks(jsonBooks);
       };
     }
@@ -87,6 +92,7 @@ const AddBookExcel = () => {
     addBooksListAPI(books)
       .then((response) => {
         notify.showNotification('Books has been added', 'success');
+        setBooks(null);
       })
       .catch((error) => {
         console.log(error);
@@ -119,6 +125,10 @@ const AddBookExcel = () => {
               type="file"
               //@ts-ignore
               onChange={onUploadExcelFile}
+              onClick={(event: any) => {
+                console.log('click');
+                event.target.value = null;
+              }}
             />
             <Button variant="contained" component="span">
               Upload

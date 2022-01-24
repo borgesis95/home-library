@@ -110,11 +110,13 @@ const Books = () => {
         otherColumns={[
           {
             field: 'library',
-            headerName: 'Library'
+            headerName: 'Library',
+            width: 100
           },
           {
             field: 'shelf',
-            headerName: 'Shelf'
+            headerName: 'Shelf',
+            width: 200
           }
         ]}
       ></BooksGrid>

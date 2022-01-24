@@ -105,9 +105,9 @@ const BooksGrid = ({
     }
   };
   const columns: GridColDef[] = [
-    { field: 'isbn', headerName: 'ISBN', width: 200 },
-    { field: 'title', headerName: 'Title', width: 250 },
-    { field: 'authors', headerName: 'Authors', width: 250 },
+    { field: 'isbn', headerName: 'ISBN', width: 150 },
+    { field: 'title', headerName: 'Title', width: 320 },
+    { field: 'authors', headerName: 'Authors', width: 200 },
     {
       field: 'isRead',
       headerName: 'Read',
@@ -118,15 +118,21 @@ const BooksGrid = ({
       field: 'isBorrow',
       headerName: 'Loan',
       width: 100,
-      renderCell: isBorrowCellRender
+      renderCell: isBorrowCellRender,
+      hide: otherColumns && otherColumns.length > 0 ? true : false
     },
-    { field: 'borrowPerson', headerName: 'Loan to', width: 100 },
+    {
+      field: 'borrowPerson',
+      headerName: 'Loan to',
+      width: 100,
+      hide: otherColumns && otherColumns.length > 0 ? true : false
+    },
 
     ...otherColumns,
     {
       field: 'update',
       headerName: 'Actions',
-      width: 150,
+      width: 130,
       headerAlign: 'center',
       renderCell: isActionRender
     }
