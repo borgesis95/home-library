@@ -2,37 +2,11 @@
 <img src="./doc/image-1.PNG">
 </p>
 
-<h1 align="center"> Home Library - Frontend </h1>
+<h1 align="center"> Home Library - Frontend app </h1>
 
 ### Introduction
 
-This project has been designed for web programming class at the University of Catania . In ì This repository show just the Frontend application, which was developed with [React](https://reactjs.org/).
-
-To understand reason and goals of this application, and also to run backend side watch here: [Home-library-backend](https://github.com/borgesis95/home-library-backend).
-
-### Getting started
-
-Make sure to properly configured backend side .
-
-First of all you need to clone the repo
-
-```sh
-git clone https://github.com/borgesis95/home-library-frontend.git
-
-cd home-library-frontend
-```
-
-Install dependecies :
-
-```sh
-npm run install
-```
-
-Start application with :
-
-```sh
-npm run start
-```
+This project has been designed for web programming class at the University of Catania .Client-side app has been developed with [React](https://reactjs.org/).
 
 ## Folders structure
 
@@ -58,7 +32,7 @@ npm run start
   <br>
 - _Split up your bookshelf in shelf_: Before to insert book into your library, you have to add shelf.
   <br>
-- _Add book_: Push book on selected shelf/library typing ISBN and some details or (if you don't find book via ISBN), you can add book manually (typing, ISBN,Author, title...).
+- _Add book_: Push book on selected shelf/library typing ISBN and some details or (if you don't find book via ISBN), you can add book manually (typing, ISBN,Author, title...). If you already have a list of excel saved on your disk, you can import it (following a template)
   <br>
 
 - _Book's list_ : Look and filters all your books . You choose between two diffeent views : Grid or Cards.

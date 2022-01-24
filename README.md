@@ -2,7 +2,7 @@
 <img src="./doc/shared-books.png"  width="170" height="200" >
 </p>
 
-<h1 align="center"> Home Library - Backend </h1>
+<h1 align="center"> Home Library  </h1>
 
 ### Introduction
 
@@ -22,7 +22,7 @@ If in your house you have a plenty of books, maybe will be tedious find out wher
 - Filter all your books and understand where is book you are looking for.
 - Share your book's list with your friends.
 
-### Getting started
+### Getting started (BE)
 
 Make sure to have:
 
@@ -33,8 +33,8 @@ Make sure to have:
 First of all you have to clone the repo:
 
 ```sh
-git clone https://github.com/borgesis95/home-library-backend.git
-cd home-library-backend
+git clone https://github.com/borgesis95/home-library.git
+cd home-library
 ```
 
 Install dependencies:
@@ -55,6 +55,30 @@ Start application with :
 npm run start
 ```
 
+### Getting started (FE)
+
+Make sure to properly configured backend side .
+
+First of all you need to clone the repo
+
+```sh
+
+
+cd client
+```
+
+Install dependecies :
+
+```sh
+npm run install
+```
+
+Start application with :
+
+```sh
+npm run start
+```
+
 ### Folders structure
 
 `./src` contain follow folders.
@@ -62,6 +86,7 @@ npm run start
 ```
 
 ./src
+├── client          # contain client (react) application
 ├── @types          # tpyes extensions for TS.
 ├── config          # configuration file for logging (winston) and passport
 ├── controllers     # This folder container books, library, and User controller.
