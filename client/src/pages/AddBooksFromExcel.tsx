@@ -129,7 +129,7 @@ const AddBookExcel = () => {
               Upload
             </Button>
             <LoadingButton
-              disabled={books.length <= 0}
+              disabled={books && books.length <= 0}
               loading={isLoading}
               sx={{ marginLeft: 2 }}
               variant="contained"
@@ -150,7 +150,7 @@ const AddBookExcel = () => {
           marginTop: 2
         }}
       >
-        {books.length > 0 && (
+        {books && books.length > 0 && (
           <Card>
             <CardHeader title="Books imported from excel" />
             <Divider />

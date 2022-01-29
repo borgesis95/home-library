@@ -50,15 +50,37 @@ const LibrariesGrid = ({
       return (
         <TableRow key={library._id}>
           <TableCell>
-            <Typography
-              variant="body1"
-              fontWeight="bold"
-              color="text.primary"
-              gutterBottom
-              noWrap
+            <Box
+              sx={{
+                display: 'flex'
+              }}
             >
-              {library.name}
-            </Typography>
+              <Typography
+                alignSelf="end"
+                variant="body1"
+                fontWeight="bold"
+                color="text.primary"
+                gutterBottom
+                noWrap
+              >
+                {library.name}
+              </Typography>
+              <Tooltip title="Go to details" arrow>
+                <IconButton
+                  onClick={() => {
+                    onArrowRightClick(library._id);
+                  }}
+                  sx={{
+                    '&:hover': { background: theme.colors.primary.lighter },
+                    color: theme.palette.primary.main
+                  }}
+                  color="inherit"
+                  size="small"
+                >
+                  <ArrowForwardIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            </Box>
           </TableCell>
           <TableCell>
             <Typography
@@ -146,21 +168,6 @@ const LibrariesGrid = ({
                 size="small"
               >
                 <DeleteTwoToneIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Go to details" arrow>
-              <IconButton
-                onClick={() => {
-                  onArrowRightClick(library._id);
-                }}
-                sx={{
-                  '&:hover': { background: theme.colors.primary.lighter },
-                  color: theme.palette.primary.main
-                }}
-                color="inherit"
-                size="small"
-              >
-                <ArrowForwardIcon fontSize="small" />
               </IconButton>
             </Tooltip>
           </TableCell>

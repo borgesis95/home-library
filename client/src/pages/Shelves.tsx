@@ -30,7 +30,7 @@ const Shelves = () => {
     useState<boolean>(false);
   const [shelfSelected, setShelfSelected] = useState<Shelf>();
   const [books, setBooks] = useState<Book>();
-  const [booksIdsSelected, setBooksIdsSelected] = useState<string[]>();
+  const [booksIdsSelected, setBooksIdsSelected] = useState<string[]>([]);
 
   const [isNewShelfDialogOpen, setShelfDialogOpen] = useState<boolean>(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
