@@ -11,6 +11,10 @@ const PORT = process.env.PORT;
 const HOST = process.env.HOST || "localhost";
 const imagePath = `http://${HOST}:${PORT}/`;
 
+const getBooks = async () => {
+  return await Book.find();
+};
+
 /**
  * Get book information via Google Books API
  * @param isbn
@@ -263,6 +267,7 @@ export default {
   associateBooksToShelf,
   getAllBooks,
   deleteBook,
+  getBooks,
   deleteShelfAssociation,
   updateBookThumbnail,
 };

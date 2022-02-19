@@ -1,16 +1,14 @@
 import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcrypt";
-import { ILibrary, librarySchema } from "./library.model";
-import { bookSchema, IBook } from "./book.model";
+import IAddress, { addressSchema } from "./address.model";
 
 export interface IUser extends mongoose.Document {
   name: string;
   email: string;
   password: string;
   comparePassword(pwd: string): Promise<boolean>;
-  libraries: ILibrary;
-  books: IBook[];
+  address?: IAddress;
 }
 
 const userSchema = new mongoose.Schema<IUser>({
@@ -37,21 +35,12 @@ const userSchema = new mongoose.Schema<IUser>({
     trim: true,
     minLength: 8,
   },
-  libraries: [librarySchema],
-  books: [bookSchema],
-});
 
-/**
- * Before User is stored into DB the password need to be crypted
- */
-// userSchema.pre("save", async function (next) {
-//   // eslint-disable-next-line @typescript-eslint/no-this-alias
-//   const user: IUser = this;
-//   if (user && user.password) {
-//     user.password = await bcrypt.hash(user.password, 10);
-//     next();
-//   }
-// });
+  address: {
+    type: addressSchema,
+    required: false,
+  },
+});
 
 // With mongoose we have the chance to instance custom methods
 
