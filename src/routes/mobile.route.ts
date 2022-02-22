@@ -1,5 +1,9 @@
 import express from "express";
-import { getBooks, signUp } from "../controllers/mobile.controller";
+import {
+  getBookInfo,
+  getBooks,
+  signUp,
+} from "../controllers/mobile.controller";
 
 /**
  * Route /mobile has been created just to serve mobile application
@@ -7,5 +11,6 @@ import { getBooks, signUp } from "../controllers/mobile.controller";
 const routes = express.Router();
 routes.get("/books", getBooks);
 routes.post("/signup", signUp);
+routes.get("/book/:id", getBookInfo);
 
 export default routes;

@@ -15,6 +15,20 @@ export const getBooks = async (
   }
 };
 
+export const getBookInfo = async (
+  req: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const bookId = req.params.id;
+    const book = await bookService.getBook(bookId);
+    response.send(book);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const signUp = async (
   req: express.Request,
   response: express.Response,
@@ -28,4 +42,4 @@ export const signUp = async (
   }
 };
 
-export default { getBooks };
+export default { getBooks, getBookInfo };

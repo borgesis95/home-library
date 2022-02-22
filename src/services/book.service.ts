@@ -30,6 +30,16 @@ const getBookInfo = async (isbn: number | string) => {
   return bookInfo.data.items;
 };
 
+/**
+ * Method that allow to get single book instance through book_id
+ * @param id
+ * @returns
+ */
+const getBook = async (id: string) => {
+  const book = await Book.findById(id);
+  return book;
+};
+
 const addBookOnLibrary = async (user: IUser, book: IBook) => {
   const newBook = {
     ...book,
@@ -268,6 +278,7 @@ export default {
   getAllBooks,
   deleteBook,
   getBooks,
+  getBook,
   deleteShelfAssociation,
   updateBookThumbnail,
 };
