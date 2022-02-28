@@ -1,7 +1,10 @@
 import bcrypt from "bcrypt";
+import { BookInfo } from "../../client/src/interface/Book";
 import User, { IUser } from "../models/user.model";
 import ApiTemplateResponse from "../utils/ApiTemplateResponse.util";
 import CustomError from "../utils/CustomError.util";
+import { mapBookFromService } from "../utils/utils";
+import bookService from "./book.service";
 import mapsService from "./maps.service";
 
 /**
@@ -33,6 +36,11 @@ const signUp = async (user: IUser) => {
   throw new CustomError("Something wrong", 500);
 };
 
+const getBookFromService = async (isbn: string | number) => {
+  const book: BookInfo[] = await bookService.getBookInfo(isbn);
+  return mapBookFromService(book[0]);
+};
 export default {
   signUp,
+  getBookFromService,
 };

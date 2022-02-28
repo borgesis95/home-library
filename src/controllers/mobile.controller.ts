@@ -2,6 +2,19 @@ import express from "express";
 import bookService from "../services/book.service";
 import mobileService from "../services/mobile.service";
 
+export const getBookInfoFromService = async (
+  req: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const isbn = req.params.isbn;
+    const book = await mobileService.getBookFromService(isbn);
+    response.send(book);
+  } catch (error) {
+    next(error);
+  }
+};
 export const getBooks = async (
   req: express.Request,
   response: express.Response,
@@ -42,4 +55,4 @@ export const signUp = async (
   }
 };
 
-export default { getBooks, getBookInfo };
+export default { getBooks, getBookInfo, getBookInfoFromService };

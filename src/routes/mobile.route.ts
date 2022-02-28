@@ -3,6 +3,7 @@ import {
   getBookInfo,
   getBooks,
   signUp,
+  getBookInfoFromService,
 } from "../controllers/mobile.controller";
 
 /**
@@ -12,5 +13,6 @@ const routes = express.Router();
 routes.get("/books", getBooks);
 routes.post("/signup", signUp);
 routes.get("/book/:id", getBookInfo);
+routes.get("/book/info/:isbn", getBookInfoFromService);
 
 export default routes;
