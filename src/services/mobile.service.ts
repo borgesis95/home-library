@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import { BookInfo } from "../../client/src/interface/Book";
+import Book, { IBook } from "../models/book.model";
 import User, { IUser } from "../models/user.model";
 import ApiTemplateResponse from "../utils/ApiTemplateResponse.util";
 import CustomError from "../utils/CustomError.util";
@@ -40,7 +41,20 @@ const getBookFromService = async (isbn: string | number) => {
   const book: BookInfo[] = await bookService.getBookInfo(isbn);
   return mapBookFromService(book[0]);
 };
+
+const addBook = async (book: IBook) => {
+  const newBook = {
+    ...book,
+    userId: null,
+    shelfId: book.shelfId === "" ? null : book.shelfId,
+  };
+
+  const bookCreated = await Book.create(newBook);
+
+  return new ApiTemplateResponse(`${book.title} has been added`, 200);
+};
 export default {
   signUp,
   getBookFromService,
+  addBook,
 };

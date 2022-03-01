@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction } from "express";
 import bookService from "../services/book.service";
 import mobileService from "../services/mobile.service";
 
@@ -23,6 +23,21 @@ export const getBooks = async (
   try {
     const books = await bookService.getBooks();
     response.send(books);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const addBook = async (
+  req: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const bookBody = req.body;
+
+    const book = await mobileService.addBook(bookBody);
+    response.send(book);
   } catch (error) {
     next(error);
   }
@@ -55,4 +70,4 @@ export const signUp = async (
   }
 };
 
-export default { getBooks, getBookInfo, getBookInfoFromService };
+export default { getBooks, getBookInfo, getBookInfoFromService, addBook };
