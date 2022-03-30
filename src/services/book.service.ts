@@ -11,8 +11,8 @@ const PORT = process.env.PORT;
 const HOST = process.env.HOST || "localhost";
 const imagePath = `http://${HOST}:${PORT}/`;
 
-const getBooks = async () => {
-  return await Book.find();
+const getBooks = async (userId: string) => {
+  return await Book.find({ userId: userId });
 };
 
 /**

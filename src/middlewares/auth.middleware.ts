@@ -27,6 +27,7 @@ export const authenticationMiddleware = (
       }
 
       req.locals = { user };
+
       return next(); // continue to next middleware if no error.
     }
   )(req, res, next);

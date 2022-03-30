@@ -1,10 +1,11 @@
 import bcrypt from "bcrypt";
+import { Error } from "mongoose";
 import { BookInfo } from "../../client/src/interface/Book";
 import Book, { IBook } from "../models/book.model";
 import User, { IUser } from "../models/user.model";
 import ApiTemplateResponse from "../utils/ApiTemplateResponse.util";
 import CustomError from "../utils/CustomError.util";
-import { mapBookFromService } from "../utils/utils";
+import { calculateDistance, mapBookFromService } from "../utils/utils";
 import bookService from "./book.service";
 import mapsService from "./maps.service";
 
@@ -42,19 +43,72 @@ const getBookFromService = async (isbn: string | number) => {
   return mapBookFromService(book[0]);
 };
 
-const addBook = async (book: IBook) => {
-  const newBook = {
-    ...book,
-    userId: null,
-    shelfId: book.shelfId === "" ? null : book.shelfId,
-  };
-
-  const bookCreated = await Book.create(newBook);
-
-  return new ApiTemplateResponse(`${book.title} has been added`, 200);
+const addBook = async (book: IBook, userId: string) => {
+  try {
+    const newBook = {
+      ...book,
+      userId: userId,
+      /*For mobile will not be chance to choose shelf/library */
+      shelfId: null,
+      borrowPerson: "Pluto",
+    };
+    await Book.create(newBook);
+    return new ApiTemplateResponse(`${book.title} has been added`, 200);
+  } catch (error: any) {
+    throw new CustomError(error.message, 500);
+  }
 };
+
+const updateBook = async (book: IBook) => {
+  await Book.findByIdAndUpdate({ _id: book._id }, book);
+
+  return new ApiTemplateResponse(`Book has been updated`, 200);
+};
+
+const deleteBook = async (bookId: string) => {
+  const bookDeleted = await Book.findByIdAndRemove(bookId);
+  return new ApiTemplateResponse(`${bookDeleted?.title} has been deleted`, 500);
+};
+
+const getUsersCloseToMe = async (
+  latitude: number,
+  longitude: number,
+  radius = 0.5,
+  userId: string
+) => {
+  const users = await User.find();
+  const response = [];
+
+  for (let i = 0; i < users.length; i++) {
+    if (
+      users[i].id !== userId &&
+      calculateDistance(
+        latitude,
+        longitude,
+        users[i].address?.latitude || -1,
+        users[i].address?.longitude || -1,
+        "K"
+      ) <= radius
+    ) {
+      response.push({
+        id: users[i].id,
+        username: users[i].email,
+        name: users[i].name,
+        latitude: users[i].address?.latitude,
+        longitude: users[i].address?.longitude,
+        street: users[i].address?.street,
+      });
+    }
+  }
+
+  return response;
+};
+
 export default {
   signUp,
   getBookFromService,
   addBook,
+  deleteBook,
+  updateBook,
+  getUsersCloseToMe,
 };

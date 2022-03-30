@@ -21,8 +21,23 @@ export const getBooks = async (
   next: express.NextFunction
 ) => {
   try {
-    const books = await bookService.getBooks();
+    const { user } = req.locals;
+    const books = await bookService.getBooks(user._id);
     response.send(books);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getUserBook = async (
+  req: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const userId = req.params.userId;
+    const userBooks = await bookService.getBooks(userId);
+    response.send(userBooks);
   } catch (error) {
     next(error);
   }
@@ -35,9 +50,39 @@ export const addBook = async (
 ) => {
   try {
     const bookBody = req.body;
+    const { user } = req.locals;
 
-    const book = await mobileService.addBook(bookBody);
+    const book = await mobileService.addBook(bookBody, user._id);
     response.send(book);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updatebook = async (
+  req: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const bookBody = req.body;
+
+    const updateBookResponse = await mobileService.updateBook(bookBody);
+    response.send(updateBookResponse);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteBook = async (
+  req: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const bookId = req.params.id;
+    const bookResponse = await mobileService.deleteBook(bookId);
+    response.send(bookResponse);
   } catch (error) {
     next(error);
   }
@@ -57,6 +102,31 @@ export const getBookInfo = async (
   }
 };
 
+export const getUsersCloseToMe = async (
+  req: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const latitude = parseFloat(req.query.latitude as string);
+    const longitude = parseFloat(req.query.longitude as string);
+    const radius = parseFloat(req.query.radius as string);
+
+    const { user } = req.locals;
+
+    const usersLocations = await mobileService.getUsersCloseToMe(
+      latitude,
+      longitude,
+      radius,
+      user._id
+    );
+
+    return response.send(usersLocations);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const signUp = async (
   req: express.Request,
   response: express.Response,
@@ -70,4 +140,13 @@ export const signUp = async (
   }
 };
 
-export default { getBooks, getBookInfo, getBookInfoFromService, addBook };
+export default {
+  getBooks,
+  getUserBook,
+  getBookInfo,
+  getBookInfoFromService,
+  getUsersCloseToMe,
+  addBook,
+  updatebook,
+  deleteBook,
+};
