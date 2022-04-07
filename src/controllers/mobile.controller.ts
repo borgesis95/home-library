@@ -1,4 +1,5 @@
 import express, { NextFunction } from "express";
+import { BookStateEnum } from "../models/book.model";
 import bookService from "../services/book.service";
 import mobileService from "../services/mobile.service";
 
@@ -22,7 +23,9 @@ export const getBooks = async (
 ) => {
   try {
     const { user } = req.locals;
-    const books = await bookService.getBooks(user._id);
+    const bookState = parseInt(req.query.state as string) || BookStateEnum.FREE;
+
+    const books = await mobileService.getUsersBook(user._id, bookState);
     response.send(books);
   } catch (error) {
     next(error);
@@ -36,13 +39,36 @@ export const getUserBook = async (
 ) => {
   try {
     const userId = req.params.userId;
-    const userBooks = await bookService.getBooks(userId);
+    const bookState = parseInt(req.query.state as string) || BookStateEnum.FREE;
+    const userBooks = await mobileService.getUsersBook(userId, bookState);
     response.send(userBooks);
   } catch (error) {
     next(error);
   }
 };
 
+/**
+ * Libri presi in prestito da qualcuno
+ * @param req
+ * @param response
+ * @param next
+ */
+export const getBorrowedBooksList = async (
+  req: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const { user } = req.locals;
+    const userBooks = await mobileService.getBorrowedBooksList(
+      user._id,
+      BookStateEnum.LOANED
+    );
+    response.send(userBooks);
+  } catch (error) {
+    next(error);
+  }
+};
 export const addBook = async (
   req: express.Request,
   response: express.Response,
@@ -74,6 +100,72 @@ export const updatebook = async (
   }
 };
 
+export const requestingBook = async (
+  req: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const { user } = req.locals;
+
+    const bookId = req.params.bookId;
+
+    const updateBookStateResponse = await mobileService.updateBookState(
+      bookId,
+      user._id,
+      req.body,
+      BookStateEnum.REQUESTED
+    );
+    response.send(updateBookStateResponse);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const acceptLoanBook = async (
+  req: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const { user } = req.locals;
+
+    const bookId = req.params.bookId;
+
+    const updateBookStateResponse = await mobileService.updateBookState(
+      bookId,
+      user._id,
+      null,
+      2
+    );
+    response.send(updateBookStateResponse);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const refuseLoanBook = async (
+  req: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const { user } = req.locals;
+
+    const bookId = req.params.bookId;
+
+    const updateBookStateResponse = await mobileService.updateBookState(
+      bookId,
+      user._id,
+      null,
+      BookStateEnum.FREE
+    );
+    response.send(updateBookStateResponse);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const deleteBook = async (
   req: express.Request,
   response: express.Response,
@@ -97,6 +189,36 @@ export const getBookInfo = async (
     const bookId = req.params.id;
     const book = await bookService.getBook(bookId);
     response.send(book);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const requestedBookDetail = async (
+  req: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const bookId = req.params.id;
+
+    const book = await mobileService.requestedBookDetail(bookId);
+    response.send(book);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const requestedBookList = async (
+  req: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const { user } = req.locals;
+
+    const books = await mobileService.requestedBookList(user._id);
+    response.send(books);
   } catch (error) {
     next(error);
   }
@@ -148,5 +270,11 @@ export default {
   getUsersCloseToMe,
   addBook,
   updatebook,
+  requestingBook,
   deleteBook,
+  requestedBookDetail,
+  requestedBookList,
+  acceptLoanBook,
+  refuseLoanBook,
+  getBorrowedBooksList,
 };

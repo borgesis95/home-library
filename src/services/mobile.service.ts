@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import bcrypt from "bcrypt";
-import { Error } from "mongoose";
+import { Types } from "mongoose";
 import { BookInfo } from "../../client/src/interface/Book";
-import Book, { IBook } from "../models/book.model";
+import Book, { BookState, BookStateEnum, IBook } from "../models/book.model";
 import User, { IUser } from "../models/user.model";
 import ApiTemplateResponse from "../utils/ApiTemplateResponse.util";
 import CustomError from "../utils/CustomError.util";
@@ -45,12 +46,21 @@ const getBookFromService = async (isbn: string | number) => {
 
 const addBook = async (book: IBook, userId: string) => {
   try {
-    const newBook = {
+    const newBook: IBook = {
       ...book,
+      //@ts-ignore
       userId: userId,
       /*For mobile will not be chance to choose shelf/library */
       shelfId: null,
       borrowPerson: "Pluto",
+      bookState: {
+        // Initialy when book is added is available
+        state: BookStateEnum.FREE,
+        from: null,
+        to: null,
+        note: null,
+        requestingUserId: null,
+      },
     };
     await Book.create(newBook);
     return new ApiTemplateResponse(`${book.title} has been added`, 200);
@@ -61,6 +71,41 @@ const addBook = async (book: IBook, userId: string) => {
 
 const updateBook = async (book: IBook) => {
   await Book.findByIdAndUpdate({ _id: book._id }, book);
+
+  return new ApiTemplateResponse(`Book has been updated`, 200);
+};
+
+const updateBookState = async (
+  bookId: string,
+  userId: string,
+  body: BookState | null,
+  bookState: BookStateEnum
+) => {
+  const userObjectId = new Types.ObjectId(userId);
+  const bookObjectId = new Types.ObjectId(bookId);
+
+  if (body) {
+    await Book.updateOne(
+      { _id: bookId },
+      {
+        $set: {
+          bookState: {
+            state: bookState,
+            requestingUserId: userObjectId,
+            phoneNumber: body.phoneNumber,
+            note: body.note,
+            from: body.from,
+            to: body.to,
+          },
+        },
+      }
+    );
+  } else {
+    await Book.updateOne(
+      { _id: bookId },
+      { $set: { "bookState.state": bookState } }
+    );
+  }
 
   return new ApiTemplateResponse(`Book has been updated`, 200);
 };
@@ -104,11 +149,128 @@ const getUsersCloseToMe = async (
   return response;
 };
 
+export const getUsersBook = async (
+  userId: string,
+  bookInfoState: BookStateEnum
+) => {
+  const userObjectId = new Types.ObjectId(userId);
+
+  if (bookInfoState == BookStateEnum.ALL) {
+    const filtersAll = [
+      {
+        $match: {
+          userId: userObjectId,
+        },
+      },
+      {
+        $project: {
+          isbn: 1,
+          title: 1,
+          authors: 1,
+          thumbnail: 1,
+          description: 1,
+          state: "$bookState.state",
+        },
+      },
+    ];
+    return await Book.aggregate(filtersAll);
+  }
+
+  return await Book.find({
+    userId: userObjectId,
+    "bookState.state": bookInfoState,
+  });
+};
+
+export const getBorrowedBooksList = async (
+  userId: string,
+  bookInfoState: BookStateEnum
+) => {
+  const userObjectId = new Types.ObjectId(userId);
+
+  console.log("userid", userId);
+
+  return await Book.find({
+    "bookState.state": bookInfoState,
+    "bookState.requestingUserId": userObjectId,
+  });
+};
+
+export const requestedBookDetail = async (bookId: string) => {
+  const bookObjectId = new Types.ObjectId(bookId);
+
+  const filter = [
+    {
+      $match: {
+        _id: bookObjectId,
+      },
+    },
+    {
+      $unwind: {
+        path: "$bookState.requestingUserId",
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "bookState.requestingUserId",
+        foreignField: "_id",
+        as: "user",
+      },
+    },
+    {
+      $unwind: {
+        path: "$user",
+      },
+    },
+    {
+      $project: {
+        id: 1,
+        isbn: 1,
+        title: 1,
+        thumbnail: 1,
+        requestedBy: "$user.email",
+        phoneNumber: "$bookState.phoneNumber",
+        from: "$bookState.from",
+        to: "$bookState.to",
+      },
+    },
+  ];
+
+  const bookDetail = await Book.aggregate(filter);
+
+  if (bookDetail && bookDetail[0]) {
+    return bookDetail[0];
+  }
+
+  return null;
+};
+
+export const requestedBookList = async (userId: string) => {
+  const objectUserId = new Types.ObjectId(userId);
+
+  const filter = [
+    {
+      $match: {
+        "bookState.state": 1,
+        "bookState.requestingUserId": objectUserId,
+      },
+    },
+  ];
+
+  return await Book.aggregate(filter);
+};
+
 export default {
   signUp,
   getBookFromService,
   addBook,
   deleteBook,
   updateBook,
+  getUsersBook,
+  updateBookState,
   getUsersCloseToMe,
+  requestedBookDetail,
+  requestedBookList,
+  getBorrowedBooksList,
 };

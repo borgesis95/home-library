@@ -1,6 +1,6 @@
 import axios from "axios";
-import { IUser } from "../models/user.model";
-import Book, { IBook } from "../models/book.model";
+import User, { IUser } from "../models/user.model";
+import Book, { bookSchema, BookStateEnum, IBook } from "../models/book.model";
 import { Types } from "mongoose";
 import { existsSync } from "fs";
 import { thumbnailBooksMapping } from "../utils/utils";
@@ -37,7 +37,33 @@ const getBookInfo = async (isbn: number | string) => {
  */
 const getBook = async (id: string) => {
   const book = await Book.findById(id);
-  return book;
+
+  if (book && book.bookState?.state == BookStateEnum.LOANED) {
+    const user = await User.findOne({ _id: book.bookState.requestingUserId });
+    return {
+      thumbnail: book.thumbnail,
+      _id: book._id,
+      isbn: book.isbn,
+      title: book.title,
+      authors: book.authors,
+      description: book.description,
+      requestedBy: (user && user.email) || "",
+      phone: book.bookState.phoneNumber,
+      state: book.bookState.state,
+    };
+  } else if (book) {
+    return {
+      _id: book._id,
+      thumbnail: book.thumbnail,
+      isbn: book.isbn,
+      title: book.title,
+      authors: book.authors,
+      description: book.description,
+      requestedBy: "",
+      phone: "",
+      state: book.bookState && book.bookState.state,
+    };
+  }
 };
 
 const addBookOnLibrary = async (user: IUser, book: IBook) => {

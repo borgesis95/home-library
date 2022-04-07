@@ -1,5 +1,21 @@
 import mongoose, { Schema } from "mongoose";
 
+export enum BookStateEnum {
+  ALL = -1,
+  FREE = 0, // Means that this book is avaiable on my books's catalogs,
+  REQUESTED = 1, // This book has been requested from someone.
+  LOANED = 2, // This book has loan to someone.
+}
+
+export interface BookState {
+  state: BookStateEnum;
+  requestingUserId?: string | null;
+  phoneNumber?: string | null;
+  note?: string | null;
+  from?: string | null;
+  to?: string | null;
+}
+
 export interface IBook extends mongoose.Document {
   isbn: string;
   title: string;
@@ -24,6 +40,11 @@ export interface IBook extends mongoose.Document {
    */
   borrowPerson?: string;
   description: string;
+
+  /**
+   *
+   */
+  bookState?: BookState;
 }
 
 export const bookSchema = new mongoose.Schema<IBook>({
@@ -77,6 +98,9 @@ export const bookSchema = new mongoose.Schema<IBook>({
 
   description: {
     type: String,
+  },
+  bookState: {
+    type: Object,
   },
 });
 
