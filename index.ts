@@ -12,6 +12,7 @@ import libraryRoutes from "./src/routes/library.route";
 import bookRoutes from "./src/routes/book.route";
 import uploadRoutes from "./src/routes/upload.route";
 import mobileRoutes from "./src/routes/mobile.route";
+import fcmRoutes from "./src/routes/fcm.route";
 import path from "path";
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.use("/library", libraryRoutes);
 app.use("/upload", authenticationMiddleware, uploadRoutes);
 app.use("/book", authenticationMiddleware, bookRoutes);
 app.use("/mobile", mobileRoutes);
+app.use("/fcm", authenticationMiddleware, fcmRoutes);
 app.use("/images", express.static("images"));
 app.use("/templates", express.static("templates"));
 

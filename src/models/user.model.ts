@@ -9,6 +9,11 @@ export interface IUser extends mongoose.Document {
   password: string;
   comparePassword(pwd: string): Promise<boolean>;
   address?: IAddress;
+  /**
+   * Save token generated from device , useful for send push
+   * notifications
+   */
+  fcmToken?: string[];
 }
 
 const userSchema = new mongoose.Schema<IUser>({
@@ -39,6 +44,10 @@ const userSchema = new mongoose.Schema<IUser>({
   address: {
     type: addressSchema,
     required: false,
+  },
+
+  fcmToken: {
+    type: [String],
   },
 });
 

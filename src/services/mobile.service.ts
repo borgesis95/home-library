@@ -188,8 +188,6 @@ export const getBorrowedBooksList = async (
 ) => {
   const userObjectId = new Types.ObjectId(userId);
 
-  console.log("userid", userId);
-
   return await Book.find({
     "bookState.state": bookInfoState,
     "bookState.requestingUserId": userObjectId,
